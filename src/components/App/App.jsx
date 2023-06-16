@@ -9,15 +9,23 @@ import {
 import { ContactForm } from 'components/ContactForm';
 import { Filter } from 'components/Filter';
 import { Contacts } from 'components/Contacts';
-import { useSelector } from 'react-redux';
-import { getContacts, getFilter } from 'redux/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectContacts, selectFilter } from 'redux/selectors';
+import { useEffect } from 'react';
+import { fetchContacts } from 'redux/operations';
+import { ToastContainer } from 'react-toastify';
 
 export const App = () => {
-  const contacts = useSelector(getContacts);
-  const filter = useSelector(getFilter);
+  const contacts = useSelector(selectContacts);
+  const filter = useSelector(selectFilter);
+const dispatch = useDispatch();
+useEffect(()=>{
+dispatch(fetchContacts())
+}, [dispatch])
+
 
   const getVisibleContacts = () => {
-    const normalizedFilter = filter.query.toLowerCase();
+    const normalizedFilter = filter.toLowerCase();
     return contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizedFilter)
     );
@@ -41,6 +49,7 @@ export const App = () => {
           <EmptyText>Не знайдено жодного контакту</EmptyText>
         )}
       </ContactsContainer>
+      <ToastContainer />
     </Container>
   );
 };

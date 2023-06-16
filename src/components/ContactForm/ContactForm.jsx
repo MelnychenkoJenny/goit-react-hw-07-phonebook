@@ -13,16 +13,19 @@ import {
 } from './ContacrForm.styled';
 import { phoneRegExp } from 'components/calc/phoneRegExp';
 import { useDispatch, useSelector } from 'react-redux';
-import { formattedNumber } from 'components/calc/numberFormatted';
-import { getContacts } from 'redux/selectors';
-import { addContacts } from 'redux/contactsSlice';
+import { selectContacts } from 'redux/selectors';
+import { addContacts } from 'redux/operations';
+import { toast } from 'react-toastify';
 
 const schema = yup.object().shape({
   name: yup.string().required("Ім'я обов'язкове!"),
   number: yup
     .string()
     .required("Номер обов'язковий!")
-    .matches(phoneRegExp, 'Номер має складатись тільки з цифр. Приберіть лишні символи.')
+    .matches(
+      phoneRegExp,
+      'Номер має складатись тільки з цифр. Приберіть лишні символи.'
+    )
     .min(7, 'Номер має бути не менше 7 цифр'),
 });
 
@@ -30,7 +33,7 @@ const nameId = nanoid();
 const numberId = nanoid();
 
 export const ContactForm = () => {
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
   const {
     register,
@@ -40,20 +43,41 @@ export const ContactForm = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
+
   const onSubmit = data => {
-    addContact(data.name, data.number);
+    addContact(data.name.trim(), data.number);
+    const repeatName = contacts.some(
+      el => el.name.toLowerCase() === data.name.trim().toLowerCase()
+    );
+    const repeatNumber = contacts.some(
+      el => el.number.replace(/\D/g, '') === data.number.toLowerCase()
+    );
+    if (repeatName || repeatNumber) {
+      return;
+    }
     reset();
   };
   const addContact = (name, number) => {
-    const formatted = formattedNumber(number);
     const repeatName = contacts.some(
       el => el.name.toLowerCase() === name.toLowerCase()
     );
+    const repeatNumber = contacts.some(
+      el => el.number.replace(/\D/g, '') === number.toLowerCase()
+    );
+ 
     if (repeatName) {
-      return alert(`${name} вже є в контактах`);
+      return toast.error(`${name} вже є в контактах. Спробуйте ввести інше ім'я`);
+    } else if (repeatNumber) {
+      return toast.error(`Такий номер ${number} вже є в контактах. Спробуйте ввести інший`);
     }
+    const contactItem = {
+      createdAt: new Date(),
+      name,
+      number,
+      id: nanoid(),
+    };
 
-    dispatch(addContacts(name, formatted));
+    dispatch(addContacts(contactItem));
   };
 
   return (
