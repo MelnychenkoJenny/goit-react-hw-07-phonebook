@@ -41,7 +41,7 @@ export const App = () => {
       {isLoading && !error && <Loader />}
 
       <ContactsContainer>
-        {error ? (
+        {/* {error ? (
           <Error>{error}</Error>
         ) : (
           <div>
@@ -56,7 +56,7 @@ export const App = () => {
               <EmptyText>Не знайдено жодного контакту</EmptyText>
             )}
           </div>
-        )}
+        )} */}
       </ContactsContainer>
       <ToastContainer />
     </Container>
