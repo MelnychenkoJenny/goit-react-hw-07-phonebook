@@ -64,11 +64,15 @@ export const ContactForm = () => {
     const repeatNumber = contacts.some(
       el => el.number.replace(/\D/g, '') === number.toLowerCase()
     );
- 
+
     if (repeatName) {
-      return toast.error(`${name} вже є в контактах. Спробуйте ввести інше ім'я`);
+      return toast.error(
+        `${name} вже є в контактах. Спробуйте ввести інше ім'я`
+      );
     } else if (repeatNumber) {
-      return toast.error(`Такий номер ${number} вже є в контактах. Спробуйте ввести інший`);
+      return toast.error(
+        `Такий номер ${number} вже є в контактах. Спробуйте ввести інший`
+      );
     }
     const contactItem = {
       createdAt: new Date(),

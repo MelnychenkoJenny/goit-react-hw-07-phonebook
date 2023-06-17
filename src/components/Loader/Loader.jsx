@@ -1,14 +1,12 @@
-import { LoaderBox, LoaderDot } from "./Loader.styled"
+import { LoaderBox, LoaderDot } from './Loader.styled';
 
 export const Loader = () => {
-    return (
-
-            <LoaderBox>
-    <LoaderDot></LoaderDot>
-    <LoaderDot></LoaderDot>
-    <LoaderDot></LoaderDot>
-    <LoaderDot></LoaderDot>
+  return (
+    <LoaderBox>
+      <LoaderDot></LoaderDot>
+      <LoaderDot></LoaderDot>
+      <LoaderDot></LoaderDot>
+      <LoaderDot></LoaderDot>
     </LoaderBox>
-
-    )
-}
+  );
+};

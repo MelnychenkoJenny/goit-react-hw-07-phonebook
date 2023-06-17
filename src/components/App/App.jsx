@@ -10,7 +10,12 @@ import { ContactForm } from 'components/ContactForm';
 import { Filter } from 'components/Filter';
 import { Contacts } from 'components/Contacts';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectContacts, selectError, selectIsLoading, selectVisibleContacts } from 'redux/selectors';
+import {
+  selectContacts,
+  selectError,
+  selectIsLoading,
+  selectVisibleContacts,
+} from 'redux/selectors';
 import { useEffect } from 'react';
 import { fetchContacts } from 'redux/operations';
 import { ToastContainer } from 'react-toastify';
@@ -22,8 +27,7 @@ export const App = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
-console.log(contacts);
-console.log(isLoading);
+
   useEffect(() => {
     dispatch(fetchContacts());
   }, [dispatch]);
@@ -34,21 +38,25 @@ console.log(isLoading);
     <Container>
       <MainTitle>Телефонна книга</MainTitle>
       <ContactForm />
-     {isLoading && !error && <Loader/>}
+      {isLoading && !error && <Loader />}
 
       <ContactsContainer>
-        
-         {error ? <Error>{error}</Error> : 
-         <div><Title>Мої контакти</Title>
-        <AmountContacts>
-          Загальна кількість контактів: {contacts.length}
-        </AmountContacts>
-        <Filter />
-        {visibleContacts.length ? (
-          <Contacts contacts={visibleContacts} />
+        {error ? (
+          <Error>{error}</Error>
         ) : (
-          <EmptyText>Не знайдено жодного контакту</EmptyText>
-        )}</div>}
+          <div>
+            <Title>Мої контакти</Title>
+            <AmountContacts>
+              Загальна кількість контактів: {contacts.length}
+            </AmountContacts>
+            <Filter />
+            {visibleContacts.length ? (
+              <Contacts contacts={visibleContacts} />
+            ) : (
+              <EmptyText>Не знайдено жодного контакту</EmptyText>
+            )}
+          </div>
+        )}
       </ContactsContainer>
       <ToastContainer />
     </Container>

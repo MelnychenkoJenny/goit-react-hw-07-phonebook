@@ -85,7 +85,8 @@ export const Button = styled.button`
 
   :hover {
     transform: scale(1.1);
-    box-shadow: ${({ theme: { colors } }) => colors.buttonShadowHover} 0px 0px 5px 2px;
+    box-shadow: ${({ theme: { colors } }) => colors.buttonShadowHover} 0px 0px
+      5px 2px;
   }
   @media screen and (min-width: 1200px) {
     font-size: 18px;
