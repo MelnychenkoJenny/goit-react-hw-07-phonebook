@@ -12,10 +12,8 @@ import {
   ErrorMessageStyle,
 } from './ContacrForm.styled';
 import { phoneRegExp } from 'components/calc/phoneRegExp';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectContacts } from 'redux/selectors';
-import { addContacts } from 'redux/operations';
 import { toast } from 'react-toastify';
+import { useAddContactsMutation, useFetchContactsQuery } from 'redux/RTK-query/contactsApi';
 
 const schema = yup.object().shape({
   name: yup.string().required("Ім'я обов'язкове!"),
@@ -33,8 +31,9 @@ const nameId = nanoid();
 const numberId = nanoid();
 
 export const ContactForm = () => {
-  const contacts = useSelector(selectContacts);
-  const dispatch = useDispatch();
+  const { data: contacts=[] } = useFetchContactsQuery();
+  const[addContacts]=useAddContactsMutation()
+
   const {
     register,
     handleSubmit,
@@ -81,7 +80,7 @@ export const ContactForm = () => {
       id: nanoid(),
     };
 
-    dispatch(addContacts(contactItem));
+    addContacts(contactItem);
   };
 
   return (

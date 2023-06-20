@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-axios.defaults.baseURL = 'https://648c200b8620b8bae7ec47e8.mockapi.io/';
+axios.defaults.baseURL = 'https://648c200b8620b8bae7ec47e8.mockapi.io';
 
 export const fetchContacts = createAsyncThunk(
   'contacts/fetchAll',

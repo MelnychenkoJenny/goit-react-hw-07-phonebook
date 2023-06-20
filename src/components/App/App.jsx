@@ -9,30 +9,37 @@ import {
 import { ContactForm } from 'components/ContactForm';
 import { Filter } from 'components/Filter';
 import { Contacts } from 'components/Contacts';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  selectContacts,
-  selectError,
-  selectIsLoading,
-  selectVisibleContacts,
-} from 'redux/selectors';
-import { useEffect } from 'react';
-import { fetchContacts } from 'redux/operations';
+import { useSelector } from 'react-redux';
+import { selectFilter } from 'redux/selectors';
+
 import { ToastContainer } from 'react-toastify';
 import { Loader } from 'components/Loader/Loader';
 import { Error } from 'components/Error/Error';
+import { useFetchContactsQuery } from 'redux/RTK-query/contactsApi';
 
 export const App = () => {
-  const contacts = useSelector(selectContacts);
-  const dispatch = useDispatch();
-  const isLoading = useSelector(selectIsLoading);
-  const error = useSelector(selectError);
+  const {
+    data: contacts = [],
+    isFetching: isLoading,
+    error,
+  } = useFetchContactsQuery();
 
-  useEffect(() => {
-    dispatch(fetchContacts());
-  }, [dispatch]);
+  const filter = useSelector(selectFilter);
+  // const dispatch = useDispatch();
+  // const isLoading = useSelector(selectIsLoading);
+  // const error = useSelector(selectError);
 
-  const visibleContacts = useSelector(selectVisibleContacts);
+  // useEffect(() => {
+  //   dispatch(fetchContacts());
+  // }, [dispatch]);
+  const getFilteredContacts = () => {
+    const normalizedFilter = filter.toLowerCase();
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
+  };
+
+  const visibleContacts = getFilteredContacts();
 
   return (
     <Container>
